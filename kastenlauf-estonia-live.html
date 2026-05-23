@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kastenlauf Estonia Live Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=Inter:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  * { margin: 0; }
+
+  :root {
+    --bg: #f4eddc;
+    --paper: #fff9ec;
+    --ink: #181510;
+    --muted: rgba(24, 21, 16, 0.62);
+    --line: rgba(24, 21, 16, 0.16);
+    --gold: #e7aa28;
+    --lake: #167a78;
+    --red: #dd5a42;
+    --green: #dcefe4;
+    --stout: #211814;
+    --shadow: 6px 6px 0 rgba(24, 21, 16, 0.16);
+  }
+
+  body {
+    min-height: 100vh;
+    background:
+      linear-gradient(90deg, rgba(24, 21, 16, 0.045) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(24, 21, 16, 0.045) 1px, transparent 1px),
+      var(--bg);
+    background-size: 34px 34px;
+    color: var(--ink);
+    font-family: Inter, system-ui, sans-serif;
+  }
+
+  button, input, select { font: inherit; }
+  button { cursor: pointer; }
+  a { color: inherit; }
+
+  .wrap {
+    width: min(1180px, calc(100% - 32px));
+    margin: 0 auto;
+  }
+
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(244, 237, 220, 0.9);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+
+  .nav {
+    min-height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .mark {
+    width: 86px;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 7px;
+    overflow: hidden;
+  }
+
+  .mark img {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: contain;
+    object-position: center;
+  }
+
+  .brand strong {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 1.9rem;
+    line-height: 0.9;
+    font-weight: 400;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 8px;
+  }
+
+  .nav-links a {
+    padding: 9px 12px;
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.82rem;
+    font-weight: 800;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .nav-links a:hover {
+    background: rgba(24, 21, 16, 0.08);
+    color: var(--ink);
+  }
+
+  main {
+    padding: clamp(34px, 6vw, 68px) 0;
+  }
+
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 340px;
+    gap: 18px;
+    align-items: stretch;
+    margin-bottom: 18px;
+  }
+
+  .card {
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--paper);
+    box-shadow: var(--shadow);
+  }
+
+  .hero-title {
+    padding: clamp(20px, 4vw, 28px);
+  }
+
+  .eyebrow {
+    width: fit-content;
+    margin-bottom: 14px;
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: rgba(255, 249, 236, 0.76);
+    color: var(--muted);
+    font-family: "DM Mono", monospace;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  h1, h2, h3 {
+    font-family: "Bebas Neue", sans-serif;
+    font-weight: 400;
+    letter-spacing: 0;
+  }
+
+  h1 {
+    font-size: clamp(4rem, 10vw, 8.8rem);
+    line-height: 0.82;
+  }
+
+  .lake { color: var(--lake); }
+
+  .hero-title p:not(.eyebrow) {
+    max-width: 620px;
+    margin-top: 16px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .timer {
+    display: grid;
+    align-content: space-between;
+    min-height: 240px;
+    padding: 20px;
+    background: var(--stout);
+    color: var(--paper);
+  }
+
+  .timer strong {
+    display: block;
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 5.6rem;
+    line-height: 0.82;
+    color: var(--gold);
+  }
+
+  .timer span {
+    color: rgba(255, 249, 236, 0.64);
+    font-family: "DM Mono", monospace;
+    font-size: 0.78rem;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .button {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--ink);
+    border-radius: 999px;
+    padding: 0 14px;
+    background: var(--ink);
+    color: var(--paper);
+    box-shadow: 3px 3px 0 rgba(24, 21, 16, 0.16);
+    font-size: 0.8rem;
+    font-weight: 900;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+  }
+
+  .button.alt {
+    background: var(--paper);
+    color: var(--ink);
+  }
+
+  .button.flat {
+    box-shadow: none;
+  }
+
+  .button:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+    transform: none;
+  }
+
+  .button:hover {
+    transform: translate(-1px, -1px);
+  }
+
+  .panel-grid {
+    display: grid;
+    grid-template-columns: 0.92fr 1.08fr;
+    gap: 18px;
+    align-items: start;
+  }
+
+  .panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .panel-head h2 {
+    font-size: 2.4rem;
+    line-height: 0.9;
+  }
+
+  .panel-body {
+    padding: 16px;
+  }
+
+  .form {
+    display: grid;
+    gap: 10px;
+  }
+
+  .admin-form {
+    display: grid;
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .admin-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 8px;
+  }
+
+  .admin-status {
+    color: rgba(255, 249, 236, 0.68);
+    font-family: "DM Mono", monospace;
+    font-size: 0.74rem;
+    line-height: 1.45;
+  }
+
+  .timer input {
+    border-color: rgba(255, 249, 236, 0.38);
+    background: rgba(255, 249, 236, 0.08);
+    color: var(--paper);
+  }
+
+  .timer input::placeholder {
+    color: rgba(255, 249, 236, 0.45);
+  }
+
+  .form-row {
+    display: grid;
+    grid-template-columns: 1fr 92px 110px;
+    gap: 10px;
+  }
+
+  input, select {
+    width: 100%;
+    min-height: 42px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--paper);
+    color: var(--ink);
+    padding: 0 12px;
+    outline: none;
+  }
+
+  input:focus, select:focus {
+    box-shadow: 0 0 0 4px rgba(22, 122, 120, 0.16);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 14px;
+  }
+
+  .stat {
+    padding: 14px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--green);
+  }
+
+  .stat:nth-child(2) { background: #f3d4c9; }
+  .stat:nth-child(3) { background: var(--paper); }
+
+  .stat strong {
+    display: block;
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 2.8rem;
+    line-height: 0.84;
+  }
+
+  .stat span {
+    display: block;
+    margin-top: 7px;
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .team-list {
+    display: grid;
+    gap: 12px;
+  }
+
+  .team {
+    display: grid;
+    grid-template-columns: minmax(170px, 1fr) 150px 170px;
+    gap: 12px;
+    align-items: center;
+    padding: 14px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--paper);
+  }
+
+  .team.leader {
+    background: linear-gradient(180deg, #fff3cc, var(--paper));
+  }
+
+  .team-name {
+    font-weight: 900;
+    line-height: 1.2;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .tag {
+    padding: 5px 8px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+  }
+
+  .beer-control {
+    display: grid;
+    grid-template-columns: 36px 1fr 36px;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .icon-button {
+    min-height: 36px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--paper);
+    box-shadow: 2px 2px 0 rgba(24, 21, 16, 0.14);
+    font-weight: 900;
+  }
+
+  .beer-count {
+    min-height: 40px;
+    display: grid;
+    place-items: center;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--stout);
+    color: var(--paper);
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 2.2rem;
+    line-height: 0.86;
+  }
+
+  .score {
+    display: grid;
+    gap: 8px;
+  }
+
+  .score strong {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 3rem;
+    line-height: 0.82;
+    color: var(--lake);
+  }
+
+  .small {
+    color: var(--muted);
+    font-family: "DM Mono", monospace;
+    font-size: 0.74rem;
+    line-height: 1.45;
+  }
+
+  .empty {
+    padding: 32px;
+    border: 2px dashed rgba(24, 21, 16, 0.28);
+    border-radius: 8px;
+    background: rgba(255, 249, 236, 0.62);
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.5;
+  }
+
+  .table-wrap {
+    overflow-x: auto;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(280px, 0.9fr);
+    gap: 16px;
+    align-items: stretch;
+  }
+
+  .track-image {
+    min-height: 330px;
+    overflow: hidden;
+    border-bottom: 2px solid var(--ink);
+    background: var(--green);
+  }
+
+  .track-image img {
+    width: 100%;
+    height: 100%;
+    min-height: 330px;
+    display: block;
+    object-fit: cover;
+  }
+
+  .info-copy {
+    display: grid;
+    gap: 12px;
+    align-content: start;
+  }
+
+  .info-copy p {
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .fact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .fact {
+    padding: 14px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    background: var(--green);
+  }
+
+  .fact:nth-child(2) { background: #f3d4c9; }
+  .fact:nth-child(3) { background: var(--paper); }
+
+  .fact strong {
+    display: block;
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 2.8rem;
+    line-height: 0.84;
+  }
+
+  .fact span {
+    display: block;
+    margin-top: 7px;
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  table {
+    width: 100%;
+    min-width: 720px;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 12px;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+  }
+
+  th {
+    color: var(--muted);
+    font-family: "DM Mono", monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  td {
+    font-weight: 800;
+  }
+
+  tr:last-child td { border-bottom: 0; }
+
+  .rank {
+    font-family: "Bebas Neue", sans-serif;
+    font-size: 2rem;
+    line-height: 0.86;
+    color: var(--red);
+  }
+
+  footer {
+    padding: 30px 0 40px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    text-align: center;
+    font-size: 0.82rem;
+  }
+
+  @media (max-width: 980px) {
+    .hero,
+    .panel-grid,
+    .info-grid,
+    .team {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 680px) {
+    .wrap { width: min(100% - 24px, 1180px); }
+
+    .nav {
+      min-height: auto;
+      align-items: flex-start;
+      flex-direction: column;
+      padding: 12px 0;
+    }
+
+    .nav-links {
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .form-row,
+    .stats,
+    .fact-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+</head>
+<body>
+  <header id="top">
+    <div class="wrap nav">
+      <a class="brand" href="#top">
+        <span class="mark" aria-hidden="true"><img src="9yKT4M5i4V6BU3MIKTZsGj.webp" alt=""></span>
+        <strong>Kastenlauf<br>Estonia</strong>
+      </a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="#teams">Teams</a>
+        <a href="#leaderboard">Leaderboard</a>
+        <a href="#info-track">Info / Track</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="card hero-title">
+        <p class="eyebrow">Live board / Viljandi järv</p>
+        <h1>Kastijooks<br><span class="lake">scoreboard</span></h1>
+        <p>Add teams, track beers, and let the ranking sort itself from one shared event time.</p>
+      </div>
+
+      <aside class="card timer">
+        <div>
+          <span id="timer-state">Ready</span>
+          <strong id="timer">0:00</strong>
+        </div>
+        <div class="actions">
+          <button class="button flat" id="toggle-timer" type="button">Start</button>
+          <button class="button alt flat" id="reset-timer" type="button">Reset</button>
+        </div>
+        <form class="admin-form" id="admin-form">
+          <div class="admin-row">
+            <input id="admin-password" type="password" placeholder="Admin password" autocomplete="current-password">
+            <button class="button alt flat" id="admin-login" type="submit">Login</button>
+          </div>
+          <span class="admin-status" id="admin-status">Timer locked. Admin login required.</span>
+        </form>
+      </aside>
+    </section>
+
+    <section class="panel-grid" id="teams">
+      <div class="card">
+        <div class="panel-head">
+          <h2>Add team</h2>
+          <span class="small">12.5 km / 24 beers</span>
+        </div>
+        <div class="panel-body">
+          <form class="form" id="team-form">
+            <div class="form-row">
+              <input id="team-name" type="text" maxlength="34" placeholder="Team name" autocomplete="off" required>
+              <input id="members" type="number" min="1" max="12" value="2" aria-label="Members">
+              <select id="wave" aria-label="Wave">
+                <option>Wave A</option>
+                <option>Wave B</option>
+                <option>Wave C</option>
+              </select>
+            </div>
+            <button class="button" type="submit">Sign up team</button>
+          </form>
+
+          <div class="stats">
+            <div class="stat">
+              <strong id="team-count">0</strong>
+              <span>teams</span>
+            </div>
+            <div class="stat">
+              <strong id="beer-count">0</strong>
+              <span>beers logged</span>
+            </div>
+            <div class="stat">
+              <strong id="leader">—</strong>
+              <span>leader</span>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="button alt" id="clear" type="button">Clear all</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="panel-head">
+          <h2>Live score</h2>
+          <span class="small">30 min = 4 beers</span>
+        </div>
+        <div class="panel-body">
+          <div class="empty" id="empty-teams">No teams yet. Add the first team to start the board.</div>
+          <div class="team-list" id="team-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="leaderboard" style="margin-top:18px">
+      <div class="panel-head">
+        <h2>Leaderboard</h2>
+        <span class="small">Score = 8 × (240 − minutes) + beers × 60</span>
+      </div>
+      <div class="panel-body">
+        <div class="empty" id="empty-board">Leaderboard appears after teams are added.</div>
+        <div class="table-wrap" id="table-wrap" hidden>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Team</th>
+                <th>Wave</th>
+                <th>Time</th>
+                <th>Beers</th>
+                <th>Run</th>
+                <th>Beer</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" id="info-track" style="margin-top:18px">
+      <div class="panel-head">
+        <h2>Info / Track</h2>
+        <span class="small">Viljandi, Estonia</span>
+      </div>
+      <div class="panel-body info-grid">
+        <div class="card" style="box-shadow:none">
+          <div class="track-image">
+            <img src="Viljandi-ja%CC%88rve-matkarada.jpg" alt="Kastenlauf Estonia route around Viljandi järv">
+          </div>
+          <div class="panel-body">
+            <span class="small">Route around Viljandi järv</span>
+          </div>
+        </div>
+        <div class="info-copy">
+          <p class="eyebrow">Kastijooks / Kastenlauf Estonia</p>
+          <p>The event route goes around Viljandi järv in Viljandi, Estonia. Teams share one event timer on this live board.</p>
+          <div class="fact-grid">
+            <div class="fact">
+              <strong>12.5</strong>
+              <span>km route</span>
+            </div>
+            <div class="fact">
+              <strong>24</strong>
+              <span>beers</span>
+            </div>
+            <div class="fact">
+              <strong>30</strong>
+              <span>min = 4 beers</span>
+            </div>
+          </div>
+          <p>Score = 8 × (240 − shared minutes) + beers × 60. The target balance still means 2.5h with 20 beers ties 3h with 24 beers.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>Kastenlauf Estonia (Kastijooks) / Viljandi järv</footer>
+
+<script>
+  const MAX_MINUTES = 240;
+  const MAX_BEERS = 24;
+  const STORAGE_KEY = "kastenlauf_estonia_teams";
+  const TIMER_KEY = "kastenlauf_estonia_timer";
+  const ADMIN_SESSION_KEY = "kastenlauf_estonia_admin";
+  const ADMIN_PASSWORD = "kastijooks";
+
+  const state = {
+    teams: loadTeams(),
+    timer: loadTimer()
+  };
+
+  const el = {
+    timer: document.getElementById("timer"),
+    timerState: document.getElementById("timer-state"),
+    toggleTimer: document.getElementById("toggle-timer"),
+    resetTimer: document.getElementById("reset-timer"),
+    adminForm: document.getElementById("admin-form"),
+    adminPassword: document.getElementById("admin-password"),
+    adminLogin: document.getElementById("admin-login"),
+    adminStatus: document.getElementById("admin-status"),
+    clear: document.getElementById("clear"),
+    form: document.getElementById("team-form"),
+    teamName: document.getElementById("team-name"),
+    members: document.getElementById("members"),
+    wave: document.getElementById("wave"),
+    teamCount: document.getElementById("team-count"),
+    beerCount: document.getElementById("beer-count"),
+    leader: document.getElementById("leader"),
+    emptyTeams: document.getElementById("empty-teams"),
+    teamList: document.getElementById("team-list"),
+    emptyBoard: document.getElementById("empty-board"),
+    tableWrap: document.getElementById("table-wrap"),
+    rows: document.getElementById("rows")
+  };
+
+  function clamp(value, min, max) {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  function loadTeams() {
+    try {
+      const teams = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      return Array.isArray(teams) ? teams : [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function saveTeams() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.teams));
+  }
+
+  function loadTimer() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(TIMER_KEY) || "{}");
+      return {
+        elapsed: Number.isFinite(saved.elapsed) ? saved.elapsed : 0,
+        running: Boolean(saved.running),
+        startedAt: Number.isFinite(saved.startedAt) ? saved.startedAt : Date.now()
+      };
+    } catch (error) {
+      return { elapsed: 0, running: false, startedAt: Date.now() };
+    }
+  }
+
+  function isAdmin() {
+    return sessionStorage.getItem(ADMIN_SESSION_KEY) === "true";
+  }
+
+  function saveTimer() {
+    localStorage.setItem(TIMER_KEY, JSON.stringify(state.timer));
+  }
+
+  function elapsedSeconds() {
+    if (!state.timer.running) return state.timer.elapsed;
+    return state.timer.elapsed + Math.floor((Date.now() - state.timer.startedAt) / 1000);
+  }
+
+  function elapsedMinutes() {
+    return Math.floor(elapsedSeconds() / 60);
+  }
+
+  function formatClock(seconds) {
+    const safe = Math.max(0, Math.floor(seconds));
+    const h = Math.floor(safe / 3600);
+    const m = Math.floor((safe % 3600) / 60);
+    const s = safe % 60;
+    if (h > 0) return h + ":" + String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+    return m + ":" + String(s).padStart(2, "0");
+  }
+
+  function formatMinutes(minutes) {
+    const safe = Math.max(0, Math.floor(minutes));
+    const h = Math.floor(safe / 60);
+    const m = safe % 60;
+    if (h === 0) return m + "m";
+    return m === 0 ? h + "h" : h + "h " + m + "m";
+  }
+
+  function sharedMinutes() {
+    return clamp(elapsedMinutes(), 0, MAX_MINUTES);
+  }
+
+  function score(team) {
+    const minutes = sharedMinutes();
+    const run = Math.max(0, Math.round(8 * (MAX_MINUTES - minutes)));
+    const beer = clamp(team.beers, 0, MAX_BEERS) * 60;
+    return { run, beer, total: run + beer };
+  }
+
+  function sortedTeams() {
+    return [...state.teams].sort((a, b) => {
+      const diff = score(b).total - score(a).total;
+      if (diff !== 0) return diff;
+      return b.beers - a.beers;
+    });
+  }
+
+  function escapeHtml(value) {
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function addTeam(name, members, wave, beers = 0) {
+    state.teams.push({
+      id: Date.now() + Math.floor(Math.random() * 1000),
+      name,
+      members,
+      wave,
+      beers: clamp(beers, 0, MAX_BEERS)
+    });
+    saveTeams();
+    render();
+  }
+
+  function updateTeam(id, patch) {
+    state.teams = state.teams.map((team) => team.id === id ? { ...team, ...patch } : team);
+    saveTeams();
+    render();
+  }
+
+  function deleteTeam(id) {
+    if (!isAdmin()) return;
+    state.teams = state.teams.filter((team) => team.id !== id);
+    saveTeams();
+    render();
+  }
+
+  function renderTeam(team, index) {
+    const points = score(team);
+    const minutes = sharedMinutes();
+    const leaderClass = index === 0 ? " leader" : "";
+
+    return `
+      <article class="team${leaderClass}">
+        <div>
+          <div class="team-name">${escapeHtml(team.name)}</div>
+          <div class="meta">
+            <span class="tag">${escapeHtml(team.wave)}</span>
+            <span class="tag">${team.members} ${team.members === 1 ? "member" : "members"}</span>
+            <span class="tag">Shared time ${formatMinutes(minutes)}</span>
+          </div>
+        </div>
+        <div class="beer-control">
+          <button class="icon-button" type="button" data-action="beer-down" data-id="${team.id}" aria-label="Remove beer">−</button>
+          <div class="beer-count">${team.beers}</div>
+          <button class="icon-button" type="button" data-action="beer-up" data-id="${team.id}" aria-label="Add beer">+</button>
+        </div>
+        <div class="score">
+          <strong>${points.total}</strong>
+          <span class="small">${points.run} run / ${points.beer} beer</span>
+          ${isAdmin() ? `<button class="button alt flat" type="button" data-action="delete" data-id="${team.id}">Remove</button>` : ""}
+        </div>
+      </article>
+    `;
+  }
+
+  function renderRows(teams) {
+    el.rows.innerHTML = teams.map((team, index) => {
+      const points = score(team);
+      return `
+        <tr>
+          <td class="rank">${index + 1}</td>
+          <td>${escapeHtml(team.name)}</td>
+          <td class="small">${escapeHtml(team.wave)}</td>
+          <td class="small">${formatMinutes(sharedMinutes())}</td>
+          <td class="small">${team.beers} / ${MAX_BEERS}</td>
+          <td class="small">${points.run}</td>
+          <td class="small">${points.beer}</td>
+          <td>${points.total}</td>
+        </tr>
+      `;
+    }).join("");
+  }
+
+  function render() {
+    const teams = sortedTeams();
+    const totalBeers = state.teams.reduce((sum, team) => sum + team.beers, 0);
+
+    el.timer.textContent = formatClock(elapsedSeconds());
+    el.timerState.textContent = state.timer.running ? "Running" : "Ready";
+    el.toggleTimer.textContent = state.timer.running ? "Pause" : "Start";
+    el.toggleTimer.disabled = !isAdmin();
+    el.resetTimer.disabled = !isAdmin();
+    el.adminStatus.textContent = isAdmin() ? "Admin unlocked. Timer controls enabled." : "Timer locked. Admin login required.";
+    el.adminLogin.textContent = isAdmin() ? "Logout" : "Login";
+    el.adminPassword.disabled = isAdmin();
+    el.adminPassword.placeholder = isAdmin() ? "Admin active" : "Admin password";
+    el.clear.hidden = !isAdmin();
+    el.teamCount.textContent = state.teams.length;
+    el.beerCount.textContent = totalBeers;
+    el.leader.textContent = teams[0] ? teams[0].name : "—";
+
+    el.emptyTeams.style.display = teams.length ? "none" : "block";
+    el.teamList.innerHTML = teams.map(renderTeam).join("");
+
+    el.emptyBoard.style.display = teams.length ? "none" : "block";
+    el.tableWrap.hidden = teams.length === 0;
+    renderRows(teams);
+  }
+
+  el.form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const name = el.teamName.value.trim();
+    if (!name) return;
+    addTeam(name, clamp(parseInt(el.members.value, 10) || 1, 1, 12), el.wave.value);
+    el.teamName.value = "";
+    el.teamName.focus();
+  });
+
+  el.toggleTimer.addEventListener("click", () => {
+    if (!isAdmin()) return;
+    if (state.timer.running) {
+      state.timer.elapsed = elapsedSeconds();
+      state.timer.running = false;
+    } else {
+      state.timer.startedAt = Date.now();
+      state.timer.running = true;
+    }
+    saveTimer();
+    render();
+  });
+
+  el.resetTimer.addEventListener("click", () => {
+    if (!isAdmin()) return;
+    state.timer = { elapsed: 0, running: false, startedAt: Date.now() };
+    saveTimer();
+    render();
+  });
+
+  el.adminForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    if (isAdmin()) {
+      sessionStorage.removeItem(ADMIN_SESSION_KEY);
+      el.adminPassword.value = "";
+      render();
+      return;
+    }
+
+    if (el.adminPassword.value === ADMIN_PASSWORD) {
+      sessionStorage.setItem(ADMIN_SESSION_KEY, "true");
+      el.adminPassword.value = "";
+      render();
+      return;
+    }
+
+    el.adminStatus.textContent = "Wrong password.";
+    el.adminPassword.select();
+  });
+
+  el.clear.addEventListener("click", () => {
+    if (!isAdmin()) return;
+    if (!state.teams.length) return;
+    if (!confirm("Clear all teams and scores?")) return;
+    state.teams = [];
+    saveTeams();
+    render();
+  });
+
+  el.teamList.addEventListener("click", (event) => {
+    const control = event.target.closest("[data-action]");
+    if (!control) return;
+    const id = parseInt(control.dataset.id, 10);
+    const team = state.teams.find((item) => item.id === id);
+    if (!team) return;
+
+    if (control.dataset.action === "beer-up") updateTeam(id, { beers: clamp(team.beers + 1, 0, MAX_BEERS) });
+    if (control.dataset.action === "beer-down") updateTeam(id, { beers: clamp(team.beers - 1, 0, MAX_BEERS) });
+    if (control.dataset.action === "delete") deleteTeam(id);
+  });
+
+  render();
+  setInterval(() => {
+    if (state.timer.running) render();
+  }, 1000);
+</script>
+</body>
+</html>
